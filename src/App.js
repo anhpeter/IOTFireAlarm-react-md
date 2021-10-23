@@ -1,18 +1,26 @@
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import RoomList from './components/RoomList';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
     Redirect
 } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import RoomPage from './pages/RoomPage';
+import useSocket from 'use-socket.io-client';
 
 function App() {
+    const [socket] = useSocket('ws://localhost:4000', {
+        autoConnect: false,
+        //any other options
+    });
+    socket.connect();
+    socket.on('test-data', (text) => {
+        console.log(text);
+    });
+
     return (
         <Router>
             <Header></Header>

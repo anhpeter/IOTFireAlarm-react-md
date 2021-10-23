@@ -1,39 +1,43 @@
-import React from 'react'
-import { Chart } from 'react-charts'
+import React from 'react';
+import { useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
 
-export default function MyChart() {
-    const data = React.useMemo(
-        () => [
-            {
-                label: 'Series 1',
-                data: [[0, 1], [1, 2], [2, 4], [3, 2], [4, 7]]
-            },
-            {
-                label: 'Series 2',
-                data: [[0, 3], [1, 1], [2, 5], [3, 6], [4, 4]]
-            }
-        ],
-        []
-    )
+const data = {
+    labels: ['0', '2', '4', '6', '8', '10'],
+    datasets: [
+        {
+            label: 'Gas',
+            data: [1, 1, 0, 1, 0, 1],
+            fill: false,
+            backgroundColor: 'green',
+            borderColor: 'green',
+            borderDash: [20, 5],
+        },
+        {
+            label: 'Flame',
+            data: [1, 0, 1, 1, 0, 1],
+            fill: false,
+            backgroundColor: 'red',
+            borderColor: 'red',
+            borderDash: [10, 5],
+        },
+    ],
+};
 
-    const axes = React.useMemo(
-        () => [
-            { primary: true, type: 'linear', position: 'bottom' },
-            { type: 'linear', position: 'left' }
-        ],
-        []
-    )
+const options = {
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    }
+};
 
+const MyChart = () => {
     return (
-        // A react-chart hyper-responsively and continuously fills the available
-        // space of its parent element automatically
-        <div
-            style={{
-                width: '400px',
-                height: '300px'
-            }}
-        >
-            <Chart data={data} axes={axes} />
-        </div>
+        <>
+            <Line data={data} options={options} />
+        </>
     )
-}
+};
+
+export default MyChart;

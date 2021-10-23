@@ -18,8 +18,8 @@ export default function RoomList() {
 
     const roomsHtml = rooms.map(item => {
         return (
-            <div className="col-md-4 vitri">
-                <RoomExcerpt key={item.id} id={item._id} imageUrl={item.imageUrl} name={item.name} />
+            <div key={item._id} className="col-md-4 vitri">
+                <RoomExcerpt  id={item._id} imageUrl={item.imageUrl} name={item.name} />
             </div>
         )
     })
