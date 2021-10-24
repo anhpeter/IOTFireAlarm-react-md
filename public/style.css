@@ -20,14 +20,9 @@ h2 {
 }
 
 .main {
-    height: 800px;
+    flex: 1;
     padding-top: 30px;
     padding-bottom: 30px;
-}
-
-.main img {
-    height: 225px;
-    width: 325px
 }
 
 .details {
