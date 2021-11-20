@@ -13,16 +13,9 @@ const TitleWrapper = styled.div`
     justify-content:space-between;
 `;
 const Image = styled.img`
-    position:absolute;
-    top:0;
-    bottom:0;
-    max-height:100%;
-    max-width:100%;
     aspect-ratio:3/2;
     border-radius:10px;
-    @media (max-width: 992px) {
-        position:unset;
-    }
+    max-width:100%;
 `
 
 export default function RoomPage() {
@@ -52,10 +45,10 @@ export default function RoomPage() {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-lg-6 position-relative">
+                                <div className="col-lg-3" >
                                     <Image src={item.imageUrl} alt="" />
                                 </div>
-                                <div className="col-lg-6">
+                                <div className="col-lg-9">
                                     <RealtimeChart item={item} />
                                 </div>
                             </div>

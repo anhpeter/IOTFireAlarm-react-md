@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
 
@@ -9,12 +8,30 @@ const options = {
             beginAtZero: true
         }
     },
-    animation:{
+    animation: {
         duration: 0
-    }
+    },
+    responsive: true,
+    interaction: {
+        mode: 'index',
+        intersect: false,
+    },
+    stacked: false,
+    plugins: {
+        title: {
+            display: true,
+            text: 'Status Realtime Chart',
+            font: {
+                size: 22,
+                weight: 'bold',
+                lineHeight: 1.2,
+            },
+        },
+    },
 };
 
 const StatusChart = ({ labels, gasData, flameData }) => {
+    console.log(gasData, flameData, labels)
     const data = {
         labels,
         datasets: [
@@ -22,17 +39,15 @@ const StatusChart = ({ labels, gasData, flameData }) => {
                 label: 'Gas',
                 data: gasData,
                 fill: false,
-                backgroundColor: 'white',
-                borderColor: 'green',
-                borderDash: [20, 5],
+                backgroundColor: '#dbdbdb',
+                borderColor: '#8c8c8c',
             },
             {
                 label: 'Flame',
                 data: flameData,
                 fill: false,
-                backgroundColor: 'white',
-                borderColor: 'red',
-                borderDash: [10, 5],
+                backgroundColor: '#FFB1C1',
+                borderColor: '#FF6384',
             },
         ],
     };

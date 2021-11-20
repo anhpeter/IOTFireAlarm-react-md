@@ -3,6 +3,7 @@ import { useState } from 'react';
 import useSocket from 'use-socket.io-client';
 import StatusApi from '../apis/StatusApi';
 import { API_DOMAIN } from '../app_constant';
+import Helper from '../helper/Helper';
 import StatusChart from './StatusChart';
 
 const getStatus = (item, field) => {
@@ -11,7 +12,9 @@ const getStatus = (item, field) => {
 
 const getLabel = (item) => {
     const d = new Date(item.date);
-    const t = `${d.getHours()}:${d.getMinutes()}`;
+    const h = Helper.strPad(d.getHours(), 2, '0');
+    const m = Helper.strPad(d.getMinutes(), 2, '0');
+    const t = `${h}:${m}`;
     return t;
 }
 
@@ -45,7 +48,7 @@ export default function RealtimeChart({ item: room }) {
     useEffect(() => {
         const fetch = async () => {
             try {
-                let items = await StatusApi.fetchLastItemsByRoomId(room._id, 15);
+                let items = await StatusApi.fetchLastItemsByRoomId(room._id, 60)
                 items = items.reverse();
                 console.log(items);
 
@@ -62,14 +65,14 @@ export default function RealtimeChart({ item: room }) {
                 const labels = items.map(item => getLabel(item));
                 setLabels(labels);
 
-            } catch (e) { }
+            } catch (e) { 
+            }
         }
         fetch();
     }, [room._id, setGasData, setLabels, setFlameData])
 
     return (
         <div className="card">
-            <div className="card-header">Realtime </div>
             <div className="card-body">
                 <StatusChart gasData={gasData} flameData={flameData} labels={labels} />
             </div>
