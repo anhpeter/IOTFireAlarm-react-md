@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/IT3Project-react-md/static/css/main.a617e044.chunk.css",
+    "main.js": "/IT3Project-react-md/static/js/main.3bcf4d69.chunk.js",
+    "main.js.map": "/IT3Project-react-md/static/js/main.3bcf4d69.chunk.js.map",
+    "runtime-main.js": "/IT3Project-react-md/static/js/runtime-main.6e6cbd86.js",
+    "runtime-main.js.map": "/IT3Project-react-md/static/js/runtime-main.6e6cbd86.js.map",
+    "static/js/2.2442e5ba.chunk.js": "/IT3Project-react-md/static/js/2.2442e5ba.chunk.js",
+    "static/js/2.2442e5ba.chunk.js.map": "/IT3Project-react-md/static/js/2.2442e5ba.chunk.js.map",
+    "static/js/3.a6ae3971.chunk.js": "/IT3Project-react-md/static/js/3.a6ae3971.chunk.js",
+    "static/js/3.a6ae3971.chunk.js.map": "/IT3Project-react-md/static/js/3.a6ae3971.chunk.js.map",
+    "index.html": "/IT3Project-react-md/index.html",
+    "static/css/main.a617e044.chunk.css.map": "/IT3Project-react-md/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.2442e5ba.chunk.js.LICENSE.txt": "/IT3Project-react-md/static/js/2.2442e5ba.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6e6cbd86.js",
+    "static/js/2.2442e5ba.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.3bcf4d69.chunk.js"
+  ]
+}
