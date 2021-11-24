@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import RoomApi from '../apis/RoomApi';
+import ChartTimeBar from '../components/ChartTimeBar';
 import Clock from '../components/Clock';
 import RealtimeChart from '../components/RealtimeChart';
 
@@ -21,6 +22,7 @@ const Image = styled.img`
 export default function RoomPage() {
     const [item, setItem] = useState(undefined);
     let { id } = useParams();
+    const [chartTimeInHour, setChartTimeInHour] = useState(1);
     useEffect(() => {
         const fetchItem = async () => {
             const r = await RoomApi.fetchItemById(id)
@@ -28,7 +30,6 @@ export default function RoomPage() {
         }
         fetchItem();
     }, [id, setItem]);
-    const loading = <p>Loading ...</p>
     return (
         <>
             <div className="container">
@@ -45,11 +46,14 @@ export default function RoomPage() {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-lg-3" >
+                                <div className="offset-lg-5 col-lg-2 mb-3" >
                                     <Image src={item.imageUrl} alt="" />
                                 </div>
-                                <div className="col-lg-9">
-                                    <RealtimeChart item={item} />
+                                <div className="col-12">
+                                    <div>
+                                        <ChartTimeBar chartTimeInHour={chartTimeInHour} onTimeChange={setChartTimeInHour} />
+                                    </div>
+                                    <RealtimeChart chartTimeInHour={chartTimeInHour} item={item} />
                                 </div>
                             </div>
                         </>

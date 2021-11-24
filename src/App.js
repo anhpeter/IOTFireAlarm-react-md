@@ -5,7 +5,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect
+    Redirect,
+    HashRouter
 } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import RoomPage from './pages/RoomPage';
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
 function App() {
 
     return (
-        <Router>
+        <HashRouter>
             <Wrapper>
                 <Header></Header>
 
@@ -33,15 +34,15 @@ function App() {
                         <Route path="/" exact>
                             <HomePage />
                         </Route>
-                        <Route path="*">
+                        {/* <Route path="*">
                             <Redirect to="/" />
-                        </Route>
+                        </Route> */}
                     </Switch>
                 </div>
 
                 <Footer />
             </Wrapper>
-        </Router>
+        </HashRouter>
 
     );
 }

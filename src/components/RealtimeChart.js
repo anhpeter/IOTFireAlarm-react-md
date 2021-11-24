@@ -3,73 +3,60 @@ import { useState } from 'react';
 import useSocket from 'use-socket.io-client';
 import StatusApi from '../apis/StatusApi';
 import { API_DOMAIN } from '../app_constant';
-import Helper from '../helper/Helper';
+import ChartHelper from '../helper/ChartHeper';
 import StatusChart from './StatusChart';
 
-const getStatus = (item, field) => {
-    return item[field] === 0 ? 1 : 0;
-}
 
-const getLabel = (item) => {
-    const d = new Date(item.date);
-    const h = Helper.strPad(d.getHours(), 2, '0');
-    const m = Helper.strPad(d.getMinutes(), 2, '0');
-    const t = `${h}:${m}`;
-    return t;
-}
 
-export default function RealtimeChart({ item: room }) {
+export default function RealtimeChart({ item: room, chartTimeInHour }) {
     const [socket] = useSocket(API_DOMAIN);
-    const defaultData = [];
-    const [gasData, setGasData] = useState(defaultData);
-    const [flameData, setFlameData] = useState(defaultData);
-    const [labels, setLabels] = useState(defaultData);
+
+    const { flameData: defaultFlames, gasData: defaultGases, labels: defaultLabels } = ChartHelper.genDefaultData(chartTimeInHour);
+    const [gasData, setGasData] = useState(defaultGases);
+    const [flameData, setFlameData] = useState(defaultFlames);
+    const [labels, setLabels] = useState(defaultLabels);
 
     // SOCKET
     useEffect(() => {
+        socket.off(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`);
         socket.on(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`, (data) => {
-            console.log(data);
+            console.log('socket')
             setGasData(items => {
-                const status = getStatus(data, ['gas']);
+                const status = ChartHelper.getStatus(data, ['gas']);
                 return items.length === 0 ? [status] : [...items.slice(1), status];
             })
             setFlameData(items => {
-                const status = getStatus(data, ['flame']);
+                const status = ChartHelper.getStatus(data, ['flame']);
                 return items.length === 0 ? [status] : [...items.slice(1), status];
             })
             setLabels(items => {
-                const lbl = getLabel(data);
+                const lbl = ChartHelper.getLabel(data, chartTimeInHour);
                 return items.length === 0 ? [lbl] : [...items.slice(1), lbl];
             })
         });
-    }, [room._id, socket])
+    }, [room._id, chartTimeInHour, socket])
 
     // FETCHES
     useEffect(() => {
         const fetch = async () => {
             try {
-                let items = await StatusApi.fetchLastItemsByRoomId(room._id, 60)
+                const chartHelper = new ChartHelper(chartTimeInHour);
+
+                // fetch
+                let items = await StatusApi.fetchLastItemsAfterTimeByRoomId(room._id, ChartHelper.getFetchTime(chartTimeInHour))
                 items = items.reverse();
-                console.log(items);
 
-                const gasData = items.map(item => {
-                    return getStatus(item, 'gas');
-                })
+                // gen data
+                const { gasData, flameData, labels } = chartHelper.genData(items);
                 setGasData(gasData);
-
-                const flameData = items.map(item => {
-                    return getStatus(item, 'flame');
-                })
                 setFlameData(flameData);
-
-                const labels = items.map(item => getLabel(item));
                 setLabels(labels);
-
-            } catch (e) { 
+            } catch (e) {
+                console.error(e)
             }
         }
         fetch();
-    }, [room._id, setGasData, setLabels, setFlameData])
+    }, [room._id, chartTimeInHour, setGasData, setLabels, setFlameData])
 
     return (
         <div className="card">

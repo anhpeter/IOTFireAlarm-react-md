@@ -1,6 +1,6 @@
 const Helper = {
     strPad: function (value, length, c) {
-        value = value+'';
+        value = value + '';
         if (value) {
             return value.length >= length
                 ? value

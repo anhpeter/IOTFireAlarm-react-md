@@ -43,7 +43,6 @@ export default function RoomExcerpt({ id, imageUrl, name }) {
 
     useEffect(() => {
         socket.on(`SERVER_EMIT_ROOM_WITH_STATUS_${id}`, (data) => {
-            console.log(data);
             if (data.gas === 0 || data.flame === 0) {
                 setWarning(true);
             } else {

@@ -6,7 +6,8 @@ const options = {
     scales: {
         y: {
             beginAtZero: true
-        }
+        },
+
     },
     animation: {
         duration: 0
@@ -31,7 +32,6 @@ const options = {
 };
 
 const StatusChart = ({ labels, gasData, flameData }) => {
-    console.log(gasData, flameData, labels)
     const data = {
         labels,
         datasets: [
@@ -54,7 +54,7 @@ const StatusChart = ({ labels, gasData, flameData }) => {
 
     return (
         <>
-            <Line data={data} options={options} />
+            <Line height={100} data={data} options={options} />
         </>
     )
 };
