@@ -45,6 +45,7 @@ const StatusChart = ({ labels, gasData, flameData, title }) => {
                 fill: false,
                 backgroundColor: '#dbdbdb',
                 borderColor: '#8c8c8c',
+                borderDash: [10, 5]
             },
             {
                 label: 'Flame',
@@ -59,7 +60,7 @@ const StatusChart = ({ labels, gasData, flameData, title }) => {
     return (
         <>
             <Wrapper>
-                <Line height={250   } data={data} options={options} />
+                <Line height={250} data={data} options={options} />
             </Wrapper>
         </>
     )

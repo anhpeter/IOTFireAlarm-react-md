@@ -44,13 +44,13 @@ class ChartHelper {
             let prev;
             let gas = 1;
             let flame = 1;
-            this.items.forEach(item => {
+            this.items.forEach((item, index) => {
                 const d = new Date(item.date);
                 d.setMinutes(0);
                 d.setSeconds(0);
                 d.setMilliseconds(0);
                 const key = d.toISOString();
-                if (!obj[key]) {
+                if (!obj[key] || this.items.length - 1 === index) {
                     // new hour
                     if (!!prev) {
                         obj[prev].gas = gas;
@@ -62,8 +62,12 @@ class ChartHelper {
                     prev = key;
                 } else {
                     // old hour
-                    if (item.gas === 0) gas = 0;
-                    if (item.flame === 0) flame = 0;
+                    if (item.gas === 0) {
+                        gas = 0;
+                    }
+                    if (item.flame === 0) {
+                        flame = 0;
+                    }
                 }
             })
         }
@@ -72,23 +76,24 @@ class ChartHelper {
 
     genData(items) {
         const { gasData, flameData, labels } = this.genDefaultData(this.time);
-        const itemsIndexes = this.getTimelineIndexes(items);
-        console.log('indexes', itemsIndexes)
 
         let i = 0;
         if (this.time < 24) {
-            // const groupTime = this.groupItemByMinutes();
-            // for (let time in groupTime) {
-            //     const item = {
-            //         ...groupTime[time],
-            //         date: time,
-            //     };
-            //     const idx = itemsIndexes[i];
-            //     gasData[idx] = ChartHelper.getStatus(item, 'gas');
-            //     flameData[idx] = ChartHelper.getStatus(item, 'flame');;
-            //     labels[idx] = ChartHelper.getLabel(item, this.time);
-            //     i++;
-            // }
+            const groupTime = this.groupItemByMinutes();
+            const itemsIndexes = this.getMinuteIndexes(groupTime);
+            for (let time in groupTime) {
+                const item = {
+                    ...groupTime[time],
+                    date: time,
+                };
+                const idx = itemsIndexes[i];
+                const gas = ChartHelper.getStatus(item, 'gas');
+                const flame = ChartHelper.getStatus(item, 'flame')
+                gasData[idx] = gas;
+                flameData[idx] = flame;
+                labels[idx] = ChartHelper.getLabel(item, this.time);
+                i++;
+            }
             for (let idx of itemsIndexes) {
                 const item = items[i];
                 gasData[idx] = ChartHelper.getStatus(item, 'gas');
@@ -98,20 +103,47 @@ class ChartHelper {
             }
         } else {
             const groupTime = this.groupItemsByHour();
+            const itemsIndexes = this.getIndexes(groupTime);
             for (let time in groupTime) {
                 const item = {
                     ...groupTime[time],
                     date: time,
                 };
                 const idx = itemsIndexes[i];
-                console.log('index', idx)
-                gasData[idx] = ChartHelper.getStatus(item, 'gas');
-                flameData[idx] = ChartHelper.getStatus(item, 'flame');;
+                const gas = ChartHelper.getStatus(item, 'gas');
+                const flame = ChartHelper.getStatus(item, 'flame')
+                gasData[idx] = gas;
+                flameData[idx] = flame;
                 labels[idx] = ChartHelper.getLabel(item, time);
                 i++;
             }
         }
         return { gasData, flameData, labels };
+    }
+
+    getMinuteIndexes(groupTime) {
+        const result = [];
+        for (let time in groupTime) {
+            let t = 1000 * 60;
+            const d = Math.abs(new Date() - new Date(time));
+            const diff = Math.ceil(d / t);
+            const index = this.timelineLength - diff;
+            result.push(index);
+        }
+        return result;
+    }
+
+    getIndexes(groupTime) {
+        const result = [];
+        const indexCount = {}
+        for (let time in groupTime) {
+            let t = 1000 * 60 * 60;
+            const d = Math.abs(new Date() - new Date(time));
+            const diff = Math.ceil(d / t);
+            const index = this.timelineLength - diff;
+            result.push(index);
+        }
+        return result;
     }
 
     genDefaultData() {
@@ -134,16 +166,21 @@ class ChartHelper {
         const d = Helper.strPad(date.getDate(), 2, '0');
         const h = Helper.strPad(date.getHours(), 2, '0');
         const m = Helper.strPad(date.getMinutes(), 2, '0');
-        if (chartTimeInHour <= 24) {
+        if (chartTimeInHour < 24) {
             return `${h}:${m}`;
         } else {
             return `${d}/${M} ${h}:${m}`;
         }
     }
 
-    static getFetchTime(h) {
+    static getFetchTime(chartTimeInHour) {
         const d = new Date();
-        d.setHours(d.getHours() - h);
+        const h = d.getHours();
+        if (chartTimeInHour === 1) {
+            d.setHours(h - 1);
+        } else {
+            d.setHours(h- chartTimeInHour);
+        }
         return d.toISOString();
     }
 
@@ -156,9 +193,9 @@ class ChartHelper {
         const labels = defaultData.slice(0).map((item, index) => {
             const d = new Date();
             if (time < 24) {
-                d.setMinutes(d.getMinutes() - (timelineLength - index))
+                d.setMinutes(d.getMinutes() - (timelineLength - index) + 1)
             } else {
-                d.setHours(d.getHours() - (timelineLength - index))
+                d.setHours(d.getHours() - (timelineLength - index) + 1)
             }
             return this.getLabel({
                 date: d,
@@ -176,13 +213,14 @@ class ChartHelper {
     }
 
     diffTime(date) {
-        let t = this.time >= 24 ? 1000 * 60 : 1000 * 60 * 60;
-        return Math.ceil(Math.abs(new Date() - date) / t);
+        let t = 1000 * 60;
+        const d = Math.abs(new Date() - date);
+        return Math.ceil(d / t);
     }
 
-
     getTimelineIndex(item) {
-        const index = this.timelineLength - this.diffTime(new Date(item.date));
+        const diff = this.diffTime(new Date(item.date))
+        const index = this.timelineLength - diff;
         return index;
     }
 

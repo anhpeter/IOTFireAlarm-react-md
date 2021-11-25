@@ -78,7 +78,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
                 // fetch
                 let items = await StatusApi.fetchLastItemsAfterTimeByRoomId(room._id, ChartHelper.getFetchTime(chartTimeInHour))
                 items = items.reverse();
-                console.log('fetch reverse', items);
+                console.log('items', items);
                 const chartHelper = new ChartHelper(chartTimeInHour, items);
 
                 // gen data
