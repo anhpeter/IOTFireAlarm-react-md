@@ -11,7 +11,6 @@ export default function RoomList() {
         const fetchItems = async () => {
             try {
                 const items = await RoomApi.fetchItems();
-                console.warn('rooms', items);
                 setRooms(items);
             }catch(e){}
         }
