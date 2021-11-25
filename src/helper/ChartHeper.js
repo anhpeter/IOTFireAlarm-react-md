@@ -8,78 +8,61 @@ class ChartHelper {
         this.timelineLength = this.getTimelineLength()
     }
 
-    groupItemByMinutes() {
-        const obj = {};
-        if (this.time < 24) {
-            let prev;
-            let gas = 1;
-            let flame = 1;
-            this.items.forEach(item => {
-                const d = new Date(item.date);
-                d.setSeconds(0);
-                d.setMilliseconds(0);
-                const key = d.toISOString();
-                if (item.gas === 0) gas = 0;
-                if (item.flame === 0) flame = 0;
-
-                if (!obj[key]) {
-                    // new hour
-                    if (!!prev) {
-                        obj[prev].gas = gas;
-                        obj[prev].flame = flame;
-                    }
-                    obj[key] = { gas, flame }
-                    gas = 1;
-                    flame = 1;
-                    prev = key;
-                }
-            })
-        }
-        return obj;
-    }
-    groupItemsByHour() {
-        const obj = {};
+    getGroupStatusKey(dateStr) {
+        const d = new Date(dateStr);
         if (this.time >= 24) {
-            let prev;
+            d.setMinutes(0);
+        }
+        d.setSeconds(0);
+        d.setMilliseconds(0);
+        return d.toISOString();
+    }
+
+    groupStatus() {
+        const obj = {};
+        if (this.items.length > 0) {
             let gas = 1;
             let flame = 1;
+            let prev = this.getGroupStatusKey(this.items[0].date);
             this.items.forEach((item, index) => {
-                const d = new Date(item.date);
-                d.setMinutes(0);
-                d.setSeconds(0);
-                d.setMilliseconds(0);
-                const key = d.toISOString();
-                // old hour
-                if (item.gas === 0) gas = 0;
-                if (item.flame === 0) flame = 0;
-                if (!obj[key] || this.items.length - 1 === index) {
-                    // new hour
+
+                // set values
+                const isLastItem = this.items.length - 1 === index;
+                const key = this.getGroupStatusKey(item.date);
+                if (!obj[key]) {
+                    // new timestamp or last item
                     if (!!prev) {
-                        obj[prev].gas = gas;
-                        obj[prev].flame = flame;
+                        // update prev 
+                        obj[prev] = {
+                            gas, flame
+                        }
                     }
-                    obj[key] = { gas, flame }
+                    // set 
                     gas = 1;
                     flame = 1;
                     prev = key;
-                } else {
                 }
+                if (item.gas === 0) gas = 0;
+                if (item.flame === 0) flame = 0;
+
+                // last item
+                if (isLastItem) { obj[key] = { gas, flame } };
             })
         }
         return obj;
     }
 
-    genData(items) {
+    genData() {
         const { gasData, flameData, labels } = this.genDefaultData(this.time);
 
         let i = 0;
         if (this.time < 24) {
-            const groupTime = this.groupItemByMinutes();
-            const itemsIndexes = this.getMinuteIndexes(groupTime);
-            console.log('gr', groupTime, itemsIndexes)
-            for (let time in groupTime) {
+            const groupStatus = this.groupStatus();
+            const itemsIndexes = this.getMinuteIndexes(groupStatus);
+            console.log('gr', groupStatus, itemsIndexes)
+            for (let time in groupStatus) {
                 const item = {
-                    ...groupTime[time],
+                    ...groupStatus[time],
                     date: time,
                 };
                 const idx = itemsIndexes[i];
@@ -90,15 +73,13 @@ class ChartHelper {
                 labels[idx] = ChartHelper.getLabel(item, this.time);
                 i++;
             }
-            console.log('gas data', gasData);
-            console.log('flame data', flameData)
         } else {
-            const groupTime = this.groupItemsByHour();
-            const itemsIndexes = this.getIndexes(groupTime);
-            console.log('gr', groupTime, itemsIndexes)
-            for (let time in groupTime) {
+            const groupStatus = this.groupStatus();
+            const itemsIndexes = this.getIndexes(groupStatus);
+            console.log('gr', groupStatus, itemsIndexes)
+            for (let time in groupStatus) {
                 const item = {
-                    ...groupTime[time],
+                    ...groupStatus[time],
                     date: time,
                 };
                 const idx = itemsIndexes[i];
