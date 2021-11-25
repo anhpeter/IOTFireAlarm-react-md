@@ -19,6 +19,9 @@ class ChartHelper {
                 d.setSeconds(0);
                 d.setMilliseconds(0);
                 const key = d.toISOString();
+                if (item.gas === 0) gas = 0;
+                if (item.flame === 0) flame = 0;
+
                 if (!obj[key]) {
                     // new hour
                     if (!!prev) {
@@ -29,10 +32,6 @@ class ChartHelper {
                     gas = 1;
                     flame = 1;
                     prev = key;
-                } else {
-                    // old hour
-                    if (item.gas === 0) gas = 0;
-                    if (item.flame === 0) flame = 0;
                 }
             })
         }
@@ -50,6 +49,9 @@ class ChartHelper {
                 d.setSeconds(0);
                 d.setMilliseconds(0);
                 const key = d.toISOString();
+                // old hour
+                if (item.gas === 0) gas = 0;
+                if (item.flame === 0) flame = 0;
                 if (!obj[key] || this.items.length - 1 === index) {
                     // new hour
                     if (!!prev) {
@@ -61,13 +63,6 @@ class ChartHelper {
                     flame = 1;
                     prev = key;
                 } else {
-                    // old hour
-                    if (item.gas === 0) {
-                        gas = 0;
-                    }
-                    if (item.flame === 0) {
-                        flame = 0;
-                    }
                 }
             })
         }
@@ -81,6 +76,7 @@ class ChartHelper {
         if (this.time < 24) {
             const groupTime = this.groupItemByMinutes();
             const itemsIndexes = this.getMinuteIndexes(groupTime);
+            console.log('gr', groupTime, itemsIndexes)
             for (let time in groupTime) {
                 const item = {
                     ...groupTime[time],
@@ -94,16 +90,12 @@ class ChartHelper {
                 labels[idx] = ChartHelper.getLabel(item, this.time);
                 i++;
             }
-            for (let idx of itemsIndexes) {
-                const item = items[i];
-                gasData[idx] = ChartHelper.getStatus(item, 'gas');
-                flameData[idx] = ChartHelper.getStatus(item, 'flame');;
-                labels[idx] = ChartHelper.getLabel(item, this.time);
-                i++;
-            }
+            console.log('gas data', gasData);
+            console.log('flame data', flameData)
         } else {
             const groupTime = this.groupItemsByHour();
             const itemsIndexes = this.getIndexes(groupTime);
+            console.log('gr', groupTime, itemsIndexes)
             for (let time in groupTime) {
                 const item = {
                     ...groupTime[time],
@@ -135,7 +127,6 @@ class ChartHelper {
 
     getIndexes(groupTime) {
         const result = [];
-        const indexCount = {}
         for (let time in groupTime) {
             let t = 1000 * 60 * 60;
             const d = Math.abs(new Date() - new Date(time));
@@ -177,9 +168,9 @@ class ChartHelper {
         const d = new Date();
         const h = d.getHours();
         if (chartTimeInHour === 1) {
-            d.setHours(h - 1);
+            d.setHours(h - chartTimeInHour);
         } else {
-            d.setHours(h- chartTimeInHour);
+            d.setHours(h - chartTimeInHour);
         }
         return d.toISOString();
     }
