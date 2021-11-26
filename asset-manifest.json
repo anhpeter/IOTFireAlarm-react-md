@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/IT3Project-react-md/static/css/main.a617e044.chunk.css",
-    "main.js": "/IT3Project-react-md/static/js/main.f3bb63ea.chunk.js",
-    "main.js.map": "/IT3Project-react-md/static/js/main.f3bb63ea.chunk.js.map",
+    "main.js": "/IT3Project-react-md/static/js/main.07697c39.chunk.js",
+    "main.js.map": "/IT3Project-react-md/static/js/main.07697c39.chunk.js.map",
     "runtime-main.js": "/IT3Project-react-md/static/js/runtime-main.d3952752.js",
     "runtime-main.js.map": "/IT3Project-react-md/static/js/runtime-main.d3952752.js.map",
-    "static/js/2.5ed6d238.chunk.js": "/IT3Project-react-md/static/js/2.5ed6d238.chunk.js",
-    "static/js/2.5ed6d238.chunk.js.map": "/IT3Project-react-md/static/js/2.5ed6d238.chunk.js.map",
+    "static/js/2.228d3cc2.chunk.js": "/IT3Project-react-md/static/js/2.228d3cc2.chunk.js",
+    "static/js/2.228d3cc2.chunk.js.map": "/IT3Project-react-md/static/js/2.228d3cc2.chunk.js.map",
     "static/js/3.d0e44e2a.chunk.js": "/IT3Project-react-md/static/js/3.d0e44e2a.chunk.js",
     "static/js/3.d0e44e2a.chunk.js.map": "/IT3Project-react-md/static/js/3.d0e44e2a.chunk.js.map",
     "index.html": "/IT3Project-react-md/index.html",
     "static/css/main.a617e044.chunk.css.map": "/IT3Project-react-md/static/css/main.a617e044.chunk.css.map",
-    "static/js/2.5ed6d238.chunk.js.LICENSE.txt": "/IT3Project-react-md/static/js/2.5ed6d238.chunk.js.LICENSE.txt"
+    "static/js/2.228d3cc2.chunk.js.LICENSE.txt": "/IT3Project-react-md/static/js/2.228d3cc2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.d3952752.js",
-    "static/js/2.5ed6d238.chunk.js",
+    "static/js/2.228d3cc2.chunk.js",
     "static/css/main.a617e044.chunk.css",
-    "static/js/main.f3bb63ea.chunk.js"
+    "static/js/main.07697c39.chunk.js"
   ]
 }
