@@ -19,4 +19,8 @@ export const ChartTimeData = [
         value: 24 * 30,
         text: '30 days',
     },
+    {
+        value: 24 * 30 * 3,
+        text: '90 days',
+    },
 ]

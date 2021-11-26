@@ -1,16 +1,13 @@
 import './App.css';
-import Footer from './components/Footer';
 import Header from './components/Header';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
     HashRouter
 } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import RoomPage from './pages/RoomPage';
-import { API_DOMAIN } from './app_constant';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -39,8 +36,6 @@ function App() {
                         </Route> */}
                     </Switch>
                 </div>
-
-                {/* <Footer /> */}
             </Wrapper>
         </HashRouter>
 

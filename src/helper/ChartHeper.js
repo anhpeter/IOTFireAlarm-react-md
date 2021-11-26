@@ -43,8 +43,10 @@ class ChartHelper {
             const d = new Date();
             if (time < 24) {
                 d.setMinutes(d.getMinutes() - (timelineLength - index) + 1)
-            } else {
+            } else if (time < 720) {
                 d.setHours(d.getHours() - (timelineLength - index) + 1)
+            } else {
+                d.setDate(d.getDate() - (timelineLength - index) + 1)
             }
             return this.getLabel({
                 date: d,
@@ -60,10 +62,13 @@ class ChartHelper {
         const d = new Date(dateStr);
         if (this.time >= 24) {
             d.setMinutes(0);
+            if (this.time >= 720) {
+                d.setHours(0);
+            }
         }
         d.setSeconds(0);
         d.setMilliseconds(0);
-        return d.toISOString();
+        return d.toString();
     }
 
     groupStatus() {
@@ -89,7 +94,10 @@ class ChartHelper {
                     gas = 1;
                     flame = 1;
                     prev = key;
+                    obj[key] = true;
                 }
+
+                //
                 if (item.gas === 0) gas = 0;
                 if (item.flame === 0) flame = 0;
 
@@ -111,11 +119,9 @@ class ChartHelper {
         const d = Helper.strPad(date.getDate(), 2, '0');
         const h = Helper.strPad(date.getHours(), 2, '0');
         const m = Helper.strPad(date.getMinutes(), 2, '0');
-        if (chartTimeInHour < 24) {
-            return `${h}:${m}`;
-        } else {
-            return `${d}/${M} ${h}:${m}`;
-        }
+        if (chartTimeInHour < 24) return `${h}:${m}`;
+        if (chartTimeInHour >= 720) return `${d}/${M}`
+        return `${d}/${M} ${h}:${m}`;
     }
 
     static getFetchTime(chartTimeInHour) {
@@ -135,7 +141,11 @@ class ChartHelper {
     getTimelineIndexesForNewStatuses(groupTime) {
         const result = [];
         for (let time in groupTime) {
-            let t = this.time < 24 ? 1000 * 60 : 1000 * 60 * 60;
+            let t = 1000 * 60;
+            if (this.time >= 24) {
+                t *= 60;
+                if (this.time >= 720) t *= 24;
+            }
             const d = Math.abs(new Date() - new Date(time));
             const diff = Math.ceil(d / t);
             const index = this.timelineLength - diff;
@@ -145,8 +155,9 @@ class ChartHelper {
     }
 
     static getTimelineLength(time) {
-        let length = time < 24 ? time * 60 : time;
-        return length;
+        if (time < 24) return time * 60;
+        if (time >= 720) return Math.ceil(time / 24);
+        return time;
     }
 }
 export default ChartHelper;

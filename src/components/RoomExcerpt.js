@@ -1,10 +1,10 @@
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useSocket from 'use-socket.io-client';
 import { API_DOMAIN } from '../app_constant';
+import AppLink from './AppLink';
 
 
 const Image = styled.img`
@@ -37,6 +37,14 @@ const Warning = styled.div`
     font-weight: bold;
 `;
 
+const RoomName = styled.h5`
+    text-decoration: none;
+    color:black;
+    &:hover{
+        text-decoration: none;
+    }
+`;
+
 
 export default function RoomExcerpt({ id, imageUrl, name }) {
     const [socket] = useSocket(API_DOMAIN);
@@ -52,20 +60,19 @@ export default function RoomExcerpt({ id, imageUrl, name }) {
         });
     }, [id, socket, setWarning]);
 
-
     return (
         <div>
-            <Link to={'/room/' + id}>
+            <AppLink to={'/room/' + id}>
                 <Wrapper>
                     <Image src={imageUrl} alt="" />
                     {
                         isWarning ? <Warning>{name}</Warning> : null
                     }
+                    {
+                        isWarning ? null : <h5 className="text-center py-2">{name}</h5>
+                    }
                 </Wrapper>
-            </Link>
-            {
-                isWarning ? null : <h5>{name}</h5>
-            }
+            </AppLink>
         </div>
     )
 }

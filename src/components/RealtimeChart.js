@@ -95,7 +95,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
     }, [room._id, chartTimeInHour, setGasData, setLabels, setFlameData])
 
     const ChartTimeItem = ChartTimeData.find(item => item.value === chartTimeInHour);
-    const chartTitle = chartTimeInHour < 24 ? `Realtime In Last ${ChartTimeItem.text}` : `Last ${ChartTimeItem.text}`
+    const chartTitle = chartTimeInHour < 24 ? `Realtime Last ${ChartTimeItem.text}` : `Last ${ChartTimeItem.text}`
 
     return (
         <div className="card border-0">
