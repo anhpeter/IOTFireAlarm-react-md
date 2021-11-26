@@ -63,17 +63,17 @@ export default function RoomPage() {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="offset-lg-4 col-lg-4 mb-3" >
+                                <div className="offset-sm-4 col-sm-4 mb-3" >
                                     <Image src={item.imageUrl} alt="" />
                                 </div>
                                 <div className="col-12">
                                     <ToolBar>
                                         <ChartTimeBar chartTimeInHour={chartTimeInHour} onTimeChange={setChartTimeInHour} />
-                                        {
+                                        {/* {
                                             chartTimeInHour < 24
                                                 ? <DummyRealtimeStatusToggler setDummyRealtimeStatus={setDummyRealtimeStatus} hasDummyRealtimeStatus={hasDummyRealtimeStatus} />
                                                 : null
-                                        }
+                                        } */}
                                     </ToolBar>
                                     <RealtimeChart chartTimeInHour={chartTimeInHour} item={item} hasDummyRealtimeStatus={hasDummyRealtimeStatus} />
                                 </div>

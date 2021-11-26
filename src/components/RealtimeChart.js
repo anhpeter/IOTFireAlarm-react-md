@@ -48,25 +48,25 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
         });
 
         // LIST DUMMY STATUS
-        if (hasDummyRealtimeStatus) {
-            socket.on(`SERVER_EMIT_DUMMY_STATUS_${room._id}`, (data) => {
-                if (chartTimeInHour < 24) {
-                    setGasData(items => {
-                        const status = ChartHelper.getStatus(data, ['gas']);
-                        return items.length === 0 ? [status] : [...items.slice(1), status];
-                    })
-                    setFlameData(items => {
-                        const status = ChartHelper.getStatus(data, ['flame']);
-                        return items.length === 0 ? [status] : [...items.slice(1), status];
-                    })
-                    setLabels(items => {
-                        const lbl = ChartHelper.getLabel(data, chartTimeInHour);
-                        return items.length === 0 ? [lbl] : [...items.slice(1), lbl];
-                    })
+        // if (hasDummyRealtimeStatus) {
+        //     socket.on(`SERVER_EMIT_DUMMY_STATUS_${room._id}`, (data) => {
+        //         if (chartTimeInHour < 24) {
+        //             setGasData(items => {
+        //                 const status = ChartHelper.getStatus(data, ['gas']);
+        //                 return items.length === 0 ? [status] : [...items.slice(1), status];
+        //             })
+        //             setFlameData(items => {
+        //                 const status = ChartHelper.getStatus(data, ['flame']);
+        //                 return items.length === 0 ? [status] : [...items.slice(1), status];
+        //             })
+        //             setLabels(items => {
+        //                 const lbl = ChartHelper.getLabel(data, chartTimeInHour);
+        //                 return items.length === 0 ? [lbl] : [...items.slice(1), lbl];
+        //             })
 
-                }
-            });
-        }
+        //         }
+        //     });
+        // }
     }, [room._id, chartTimeInHour, hasDummyRealtimeStatus, socket])
 
     // FETCHES
@@ -78,7 +78,6 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
                 // fetch
                 let items = await StatusApi.fetchLastItemsAfterTimeByRoomId(room._id, ChartHelper.getFetchTime(chartTimeInHour))
                 items = items.reverse();
-                console.log('items', items);
                 const chartHelper = new ChartHelper(chartTimeInHour, items);
 
                 // gen data
@@ -96,7 +95,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
     }, [room._id, chartTimeInHour, setGasData, setLabels, setFlameData])
 
     const ChartTimeItem = ChartTimeData.find(item => item.value === chartTimeInHour);
-    const chartTitle = chartTimeInHour < 24 ? `Realtime Status In Last ${ChartTimeItem.text}` : `Status In Last ${ChartTimeItem.text}`
+    const chartTitle = chartTimeInHour < 24 ? `Realtime In Last ${ChartTimeItem.text}` : `Last ${ChartTimeItem.text}`
 
     return (
         <div className="card border-0">
