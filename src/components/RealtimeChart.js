@@ -13,15 +13,15 @@ const ChartContainer = styled.div`
     height:400px;
 `;
 
-
 export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRealtimeStatus }) {
     const [socket] = useSocket(API_DOMAIN);
+    const [isLoading, setLoading] = useState(false);
 
+    // data
     const { flameData: defaultFlames, gasData: defaultGases, labels: defaultLabels } = ChartHelper.genDefaultData(chartTimeInHour);
     const [gasData, setGasData] = useState(defaultGases);
     const [flameData, setFlameData] = useState(defaultFlames);
     const [labels, setLabels] = useState(defaultLabels);
-    const [isLoading, setLoading] = useState(false);
 
     // SOCKET
     useEffect(() => {

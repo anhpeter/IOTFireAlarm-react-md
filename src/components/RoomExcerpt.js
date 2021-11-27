@@ -35,16 +35,7 @@ const Warning = styled.div`
     background-color: rgba(247,15,15,.7);
     z-index:1;
     font-weight: bold;
-`;
-
-const RoomName = styled.h5`
-    text-decoration: none;
-    color:black;
-    &:hover{
-        text-decoration: none;
-    }
-`;
-
+`
 
 export default function RoomExcerpt({ id, imageUrl, name }) {
     const [socket] = useSocket(API_DOMAIN);
