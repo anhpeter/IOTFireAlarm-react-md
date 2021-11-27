@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import useSocket from 'use-socket.io-client';
-import { API_DOMAIN } from '../app_constant';
+import { API_DOMAIN } from '../constants/app_constant';
 import AppLink from './AppLink';
 
 

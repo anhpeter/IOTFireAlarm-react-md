@@ -39,7 +39,7 @@ export default function RoomPage() {
     let { id } = useParams();
     const [item, setItem] = useState(undefined);
     const [hasDummyRealtimeStatus, setDummyRealtimeStatus] = useState(false);
-    const [chartTimeInHour, setChartTimeInHour] = useState(240);
+    const [chartTimeInHour, setChartTimeInHour] = useState(-1);
     useEffect(() => {
         const fetchItem = async () => {
             const r = await RoomApi.fetchItemById(id)

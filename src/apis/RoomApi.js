@@ -1,4 +1,4 @@
-import { API_DOMAIN } from "../app_constant";
+import { API_DOMAIN } from "../constants/app_constant";
 
 const RoomApi = {
     fetchItems: async function () {

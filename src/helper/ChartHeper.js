@@ -1,3 +1,4 @@
+import { LAST_REALTIME_QTY } from "../constants/app_constant";
 import Helper from "./Helper";
 
 class ChartHelper {
@@ -10,23 +11,30 @@ class ChartHelper {
 
     // GEN
     genData() {
-        const { gasData, flameData, labels } = this.genDefaultData(this.time);
+        if (this.time > -1) {
+            const { gasData, flameData, labels } = this.genDefaultData();
 
-        let i = 0;
-        const groupStatus = this.groupStatus();
-        const timelineIndexes = this.getTimelineIndexesForNewStatuses(groupStatus);
-        for (let time in groupStatus) {
-            const item = {
-                ...groupStatus[time],
-                date: time,
-            };
-            const idx = timelineIndexes[i];
-            gasData[idx] = ChartHelper.getStatus(item, 'gas');
-            flameData[idx] = ChartHelper.getStatus(item, 'flame')
-            labels[idx] = ChartHelper.getLabel(item, this.time);
-            i++;
+            let i = 0;
+            const groupStatus = this.groupStatus();
+            const timelineIndexes = this.getTimelineIndexesForNewStatuses(groupStatus);
+            for (let time in groupStatus) {
+                const item = {
+                    ...groupStatus[time],
+                    date: time,
+                };
+                const idx = timelineIndexes[i];
+                gasData[idx] = ChartHelper.getStatus(item, 'gas');
+                flameData[idx] = ChartHelper.getStatus(item, 'flame')
+                labels[idx] = ChartHelper.getLabel(item, this.time);
+                i++;
+            }
+            return { gasData, flameData, labels };
+        } else {
+            const gasData = this.items.map(item => ChartHelper.getStatus(item, 'gas'));
+            const flameData = this.items.map(item => ChartHelper.getStatus(item, 'flame'));
+            const labels = this.items.map(item => ChartHelper.getLabel(item, this.time));
+            return { gasData, flameData, labels };
         }
-        return { gasData, flameData, labels };
     }
 
     genDefaultData() {
@@ -34,27 +42,31 @@ class ChartHelper {
     }
 
     static genDefaultData(time) {
+        let gasData, flameData, labels;
         //
-        const timelineLength = ChartHelper.getTimelineLength(time);
+        const timelineLength = time > -1 ? ChartHelper.getTimelineLength(time) : LAST_REALTIME_QTY;
         const defaultData = [...Array(timelineLength)].map(_ => 0);
-        const gasData = defaultData.slice(0);
-        const flameData = defaultData.slice(0);
-        const labels = defaultData.slice(0).map((item, index) => {
+        gasData = defaultData.slice(0);
+        flameData = defaultData.slice(0);
+        labels = ChartHelper.genDefaultLabels(timelineLength, time);
+        return { gasData, flameData, labels }
+    }
+
+    static genDefaultLabels(length, time) {
+        const labels = [...Array(length)].map((_, index) => {
             const d = new Date();
             if (time < 24) {
-                d.setMinutes(d.getMinutes() - (timelineLength - index) + 1)
+                d.setMinutes(d.getMinutes() - (length - index) + 1)
             } else if (time < 720) {
-                d.setHours(d.getHours() - (timelineLength - index) + 1)
+                d.setHours(d.getHours() - (length - index) + 1)
             } else {
-                d.setDate(d.getDate() - (timelineLength - index) + 1)
+                d.setDate(d.getDate() - (length - index) + 1)
             }
             return this.getLabel({
                 date: d,
             }, time)
         })
-        return {
-            gasData, flameData, labels
-        }
+        return labels;
     }
 
     // GROUP STATUSES

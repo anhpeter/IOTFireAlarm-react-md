@@ -1,5 +1,9 @@
 export const ChartTimeData = [
     {
+        value: -1,
+        text: 'Realtime',
+    },
+    {
         value: 1,
         text: '1 hour',
     },
@@ -12,8 +16,8 @@ export const ChartTimeData = [
         text: '7 days',
     },
     {
-        value: 24 * 10,
-        text: '10 days',
+        value: 24 * 15,
+        text: '15 days',
     },
     {
         value: 24 * 30,

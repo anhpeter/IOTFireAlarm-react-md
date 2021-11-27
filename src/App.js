@@ -9,11 +9,11 @@ import {
 import HomePage from './pages/HomePage';
 import RoomPage from './pages/RoomPage';
 import styled from 'styled-components';
+import AlarmSound from './components/AlarmSound';
 
 const Wrapper = styled.div`
     display:flex;
     flex-direction:column;
-    min-height:100vh;
 `;
 
 function App() {
@@ -36,9 +36,9 @@ function App() {
                         </Route> */}
                     </Switch>
                 </div>
+                {/* <AlarmSound /> */}
             </Wrapper>
         </HashRouter>
-
     );
 }
 

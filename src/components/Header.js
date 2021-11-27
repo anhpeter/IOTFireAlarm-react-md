@@ -6,9 +6,11 @@ export default function Header() {
     return (
         <div className="header">
             <div className="container">
-                <AppLink to="/">
-                    <h2>Hotel Management</h2>
-                </AppLink>
+                <h2>
+                    <AppLink to="/">
+                        Hotel Management
+                    </AppLink>
+                </h2>
             </div>
         </div>
     )

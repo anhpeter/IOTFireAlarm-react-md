@@ -3,14 +3,17 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import useSocket from 'use-socket.io-client';
 import StatusApi from '../apis/StatusApi';
-import { API_DOMAIN } from '../app_constant';
+import { API_DOMAIN } from '../constants/app_constant';
 import { ChartTimeData } from '../common/Data';
 import ChartHelper from '../helper/ChartHeper';
-import Alert from './Alert';
 import StatusChart from './StatusChart';
+import Loading from './Loading';
 
 const ChartContainer = styled.div`
-    height:400px;
+    min-height:300px;
+    flex-direction:column;
+    display:flex;
+    justify-content:center;
 `;
 
 export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRealtimeStatus }) {
@@ -23,14 +26,15 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
     const [flameData, setFlameData] = useState(defaultFlames);
     const [labels, setLabels] = useState(defaultLabels);
 
+    // const [realtimeLabels, setRealtimeLabels] = useState(defaultLabels);
+    // const [realtimeFlames, setRealtimeFlames] = useState(defaultFlames);
+    // const [realtimeGases, setRealtimeGases] = useState(defaultGases);
+
     // SOCKET
     useEffect(() => {
-        socket.off(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`);
-        socket.off(`SERVER_EMIT_DUMMY_STATUS_${room._id}`);
-
         // LISTEN STATUS
         socket.on(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`, (data) => {
-            if (chartTimeInHour < 24) {
+            if (chartTimeInHour === -1) {
                 setGasData(items => {
                     const status = ChartHelper.getStatus(data, ['gas']);
                     return items.length === 0 ? [status] : [...items.slice(1), status];
@@ -43,30 +47,10 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
                     const lbl = ChartHelper.getLabel(data, chartTimeInHour);
                     return items.length === 0 ? [lbl] : [...items.slice(1), lbl];
                 })
-
             }
         });
-
-        // LIST DUMMY STATUS
-        // if (hasDummyRealtimeStatus) {
-        //     socket.on(`SERVER_EMIT_DUMMY_STATUS_${room._id}`, (data) => {
-        //         if (chartTimeInHour < 24) {
-        //             setGasData(items => {
-        //                 const status = ChartHelper.getStatus(data, ['gas']);
-        //                 return items.length === 0 ? [status] : [...items.slice(1), status];
-        //             })
-        //             setFlameData(items => {
-        //                 const status = ChartHelper.getStatus(data, ['flame']);
-        //                 return items.length === 0 ? [status] : [...items.slice(1), status];
-        //             })
-        //             setLabels(items => {
-        //                 const lbl = ChartHelper.getLabel(data, chartTimeInHour);
-        //                 return items.length === 0 ? [lbl] : [...items.slice(1), lbl];
-        //             })
-
-        //         }
-        //     });
-        // }
+        return () => {
+        }
     }, [room._id, chartTimeInHour, hasDummyRealtimeStatus, socket])
 
     // FETCHES
@@ -76,12 +60,19 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
             try {
 
                 // fetch
-                let items = await StatusApi.fetchLastItemsAfterTimeByRoomId(room._id, ChartHelper.getFetchTime(chartTimeInHour))
+                let items;
+                if (chartTimeInHour === -1) {
+                    items = await StatusApi.fetchLastItems(room._id, 30)
+                } else {
+                    items = await StatusApi.fetchLastItemsAfterTimeByRoomId(room._id, ChartHelper.getFetchTime(chartTimeInHour))
+                }
+
                 items = items.reverse();
                 const chartHelper = new ChartHelper(chartTimeInHour, items);
 
                 // gen data
                 const { gasData, flameData, labels } = chartHelper.genData(items);
+
                 setGasData(gasData);
                 setFlameData(flameData);
                 setLabels(labels);
@@ -95,15 +86,25 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
     }, [room._id, chartTimeInHour, setGasData, setLabels, setFlameData])
 
     const ChartTimeItem = ChartTimeData.find(item => item.value === chartTimeInHour);
-    const chartTitle = chartTimeInHour < 24 ? `Realtime Last ${ChartTimeItem.text}` : `Last ${ChartTimeItem.text}`
+    const chartTitle = chartTimeInHour < -1 ? `Realtime status` : `Last ${ChartTimeItem.text}`
 
+    let gasDs, flameDs, labelDs;
+    // if (chartTimeInHour === -1) {
+    // gasDs = realtimeGases;
+    // flameDs = realtimeFlames;
+    // labelDs = realtimeLabels;
+    // } else {
+    gasDs = gasData;
+    flameDs = flameData;
+    labelDs = labels;
+    // }
     return (
         <div className="card border-0">
             <ChartContainer className="card-body" >
                 {
                     !isLoading
-                        ? <StatusChart title={chartTitle} gasData={gasData} flameData={flameData} labels={labels} />
-                        : <Alert color="info">Loading ...</Alert>
+                        ? <StatusChart title={chartTitle} gasData={gasDs} flameData={flameDs} labels={labelDs} />
+                        : <Loading />
                 }
             </ChartContainer>
         </div>
