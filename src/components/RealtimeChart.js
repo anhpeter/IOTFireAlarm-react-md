@@ -6,6 +6,7 @@ import StatusApi from '../apis/StatusApi';
 import { API_DOMAIN } from '../constants/app_constant';
 import { ChartTimeData } from '../common/Data';
 import ChartHelper from '../helper/ChartHeper';
+import Alert from './Alert';
 import StatusChart from './StatusChart';
 import Loading from './Loading';
 
@@ -50,6 +51,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
             }
         });
         return () => {
+            socket.off(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`);
         }
     }, [room._id, chartTimeInHour, hasDummyRealtimeStatus, socket])
 
@@ -86,7 +88,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
     }, [room._id, chartTimeInHour, setGasData, setLabels, setFlameData])
 
     const ChartTimeItem = ChartTimeData.find(item => item.value === chartTimeInHour);
-    const chartTitle = chartTimeInHour < -1 ? `Realtime status` : `Last ${ChartTimeItem.text}`
+    const chartTitle = chartTimeInHour === -1 ? `Realtime status` : `Last ${ChartTimeItem.text}`
 
     let gasDs, flameDs, labelDs;
     // if (chartTimeInHour === -1) {
