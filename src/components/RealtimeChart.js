@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import styled from 'styled-components';
-import useSocket from 'use-socket.io-client';
 import StatusApi from '../apis/StatusApi';
 import { API_DOMAIN } from '../constants/app_constant';
 import { ChartTimeData } from '../common/Data';
 import ChartHelper from '../helper/ChartHeper';
-import Alert from './Alert';
 import StatusChart from './StatusChart';
 import Loading from './Loading';
+import { socket } from '../common/Socket';
 
 const ChartContainer = styled.div`
     min-height:300px;
@@ -18,7 +17,6 @@ const ChartContainer = styled.div`
 `;
 
 export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRealtimeStatus }) {
-    const [socket] = useSocket(API_DOMAIN);
     const [isLoading, setLoading] = useState(false);
 
     // data
@@ -53,7 +51,7 @@ export default function RealtimeChart({ item: room, chartTimeInHour, hasDummyRea
         return () => {
             socket.off(`SERVER_EMIT_ROOM_WITH_STATUS_${room._id}`);
         }
-    }, [room._id, chartTimeInHour, hasDummyRealtimeStatus, socket])
+    }, [room._id, chartTimeInHour, hasDummyRealtimeStatus])
 
     // FETCHES
     useEffect(() => {

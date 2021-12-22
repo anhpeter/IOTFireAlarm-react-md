@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import useSocket from 'use-socket.io-client';
+import { socket } from '../common/Socket';
 import { API_DOMAIN } from '../constants/app_constant';
 import AppLink from './AppLink';
 
@@ -38,7 +38,6 @@ const Warning = styled.div`
 `
 
 export default function RoomExcerpt({ id, imageUrl, name }) {
-    const [socket] = useSocket(API_DOMAIN);
     const [isWarning, setWarning] = useState(false);
 
     useEffect(() => {
@@ -49,7 +48,7 @@ export default function RoomExcerpt({ id, imageUrl, name }) {
                 setWarning(false);
             }
         });
-    }, [id, socket, setWarning]);
+    }, [id, setWarning]);
 
     return (
         <div>
