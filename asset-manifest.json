@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/IT3Project-react-md/static/css/main.e19da137.chunk.css",
-    "main.js": "/IT3Project-react-md/static/js/main.5a7870e4.chunk.js",
-    "main.js.map": "/IT3Project-react-md/static/js/main.5a7870e4.chunk.js.map",
-    "runtime-main.js": "/IT3Project-react-md/static/js/runtime-main.ee81e089.js",
-    "runtime-main.js.map": "/IT3Project-react-md/static/js/runtime-main.ee81e089.js.map",
-    "static/js/2.99e0df38.chunk.js": "/IT3Project-react-md/static/js/2.99e0df38.chunk.js",
-    "static/js/2.99e0df38.chunk.js.map": "/IT3Project-react-md/static/js/2.99e0df38.chunk.js.map",
-    "static/js/3.77992a70.chunk.js": "/IT3Project-react-md/static/js/3.77992a70.chunk.js",
-    "static/js/3.77992a70.chunk.js.map": "/IT3Project-react-md/static/js/3.77992a70.chunk.js.map",
+    "main.js": "/IT3Project-react-md/static/js/main.95ec3ee6.chunk.js",
+    "main.js.map": "/IT3Project-react-md/static/js/main.95ec3ee6.chunk.js.map",
+    "runtime-main.js": "/IT3Project-react-md/static/js/runtime-main.57012d7a.js",
+    "runtime-main.js.map": "/IT3Project-react-md/static/js/runtime-main.57012d7a.js.map",
+    "static/js/2.363b75a7.chunk.js": "/IT3Project-react-md/static/js/2.363b75a7.chunk.js",
+    "static/js/2.363b75a7.chunk.js.map": "/IT3Project-react-md/static/js/2.363b75a7.chunk.js.map",
+    "static/js/3.a1c217ba.chunk.js": "/IT3Project-react-md/static/js/3.a1c217ba.chunk.js",
+    "static/js/3.a1c217ba.chunk.js.map": "/IT3Project-react-md/static/js/3.a1c217ba.chunk.js.map",
     "index.html": "/IT3Project-react-md/index.html",
     "static/css/main.e19da137.chunk.css.map": "/IT3Project-react-md/static/css/main.e19da137.chunk.css.map",
-    "static/js/2.99e0df38.chunk.js.LICENSE.txt": "/IT3Project-react-md/static/js/2.99e0df38.chunk.js.LICENSE.txt",
+    "static/js/2.363b75a7.chunk.js.LICENSE.txt": "/IT3Project-react-md/static/js/2.363b75a7.chunk.js.LICENSE.txt",
     "static/media/alarm1.411f5645.mp3": "/IT3Project-react-md/static/media/alarm1.411f5645.mp3",
     "static/media/loading.2157149b.gif": "/IT3Project-react-md/static/media/loading.2157149b.gif"
   },
   "entrypoints": [
-    "static/js/runtime-main.ee81e089.js",
-    "static/js/2.99e0df38.chunk.js",
+    "static/js/runtime-main.57012d7a.js",
+    "static/js/2.363b75a7.chunk.js",
     "static/css/main.e19da137.chunk.css",
-    "static/js/main.5a7870e4.chunk.js"
+    "static/js/main.95ec3ee6.chunk.js"
   ]
 }
